@@ -1,0 +1,18 @@
+<h1 id="bigOne"></h1>
+<script src="https://www.gstatic.com/firebasejs/3.7.1/firebase.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyABpT6Vq-WaTbOp0W4p8W9fo-D6fg1Zgz0",
+        authDomain: "timesheets-697de.firebaseapp.com",
+        databaseURL: "https://timesheets-697de.firebaseio.com",
+        storageBucket: "timesheets-697de.appspot.com",
+        messagingSenderId: "127205257452"
+    };
+    firebase.initializeApp(config);
+
+    var bigOne = document.getElementById('bigOne');
+    var myRef = firebase.database().ref().child('text');
+    myRef.on('value', snap => bigOne.innerText = snap.val());
+</script>
+
