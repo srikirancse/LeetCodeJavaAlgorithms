@@ -28,6 +28,7 @@
     <div class="idme-btn-container-modal">
         <span class="idme-btn-affinity">IVMF verifies Troop ID with ID.me</span>
 
+        <!--<a href="https://api.id.me/oauth/authorize?client_id=93fe595dde18777f899f0a8df4ce4fad&redirect_uri=http://vwise.ivmf-dev.syr.edu/apply/&response_type=token&scope=military" class="idme-btn">-->
         <a href="https://api.id.me/oauth/authorize?client_id=93fe595dde18777f899f0a8df4ce4fad&redirect_uri=http://vwise.ivmf-dev.syr.edu/apply/&response_type=token&scope=military"
            class="idme-btn">
 
@@ -47,8 +48,8 @@
 <div class="idme-btn-container">
     <span class="idme-btn-affinity">IVMF verifies Troop ID with ID.me</span>
 
-    <a href="https://api.id.me/oauth/authorize?client_id=93fe595dde18777f899f0a8df4ce4fad&redirect_uri=http://vwise.ivmf-dev.syr.edu/apply/&response_type=token&scope=military"
-       class="idme-btn">
+    <!--<a href="https://api.id.me/oauth/authorize?client_id=93fe595dde18777f899f0a8df4ce4fad&redirect_uri=http://vwise.ivmf-dev.syr.edu/apply/&response_type=token&scope=military" class="idme-btn">-->
+    <a href="https://api.id.me/oauth/authorize?client_id=93fe595dde18777f899f0a8df4ce4fad&redirect_uri=http://vwise.ivmf-dev.syr.edu/apply/&response_type=code&scope=military&state=STATE">
 
         <img src="https://s3.amazonaws.com/idme/developer/idme-buttons-2.0.1/assets/img/btn-primary-Troop.png"
              border="0" alt="Verify with ID.me Troop ID" class="idme-btn-primary-lg-Troop">
@@ -63,13 +64,16 @@
 
 <script src="https://api.id.me/oauth/authorize?client_id=93fe595dde18777f899f0a8df4ce4fad&redirect_uri=http://vwise.ivmf-dev.syr.edu/apply/&response_type=token"></script>
 <!--<script src="https://api.id.me/oauth/authorize?client_id=93fe595dde18777f899f0a8df4ce4fad&redirect_uri=http://vwise.ivmf-dev.syr.edu/apply/&response_type=code&scope=military&state=STATE"></script>-->
-
+<!--Sample Response URI: http://vwise.ivmf-dev.syr.edu/apply#access_token=3486cdb3e0424bc3a89e0d01148befd1&token_type=bearer&expires_in=300-->
+<!--http://vwise.ivmf-dev.syr.edu/apply?code=b10f1d2dbc58469f9ed6056d7fbc9a2e&state=STATE-->
 <script>
-    console.log("Hash: " + window.location.hash);
-    hash = window.location.hash.substr(1);
-    arHash = hash.split('&');
+    console.log("Hash: " + window.location.search);
+    search = window.location.search.substr(1);
+    console.log("Substr" + search);
+    arHash = search.split('&');
+    console.log("arHash" + arHash);
     hash_value = arHash[0];
-    var newAccessToken = hash_value.split('access_token=')[1];
+    var newAccessToken = hash_value.split('code=')[1];
     console.log("Hello 1 " + newAccessToken);
     var weHaveSuccess = false;
 
@@ -111,11 +115,18 @@
 
         $.ajax({
 
-            type: "GET",
+            async: true,
+
+            crossDomain: true,
+
+            method: "POST",
 
             dataType: "jsonp",
 
-            url: "https://api.id.me/api/public/v2/attributes.json?access_token=" + newAccessToken,
+            url: "https://api.id.me/oauth/token?code=" +
+                newAccessToken + "&client_id=" + "93fe595dde18777f899f0a8df4ce4fad" +
+                "&client_secret=" + "8fcc52ef082f0fa0f3a36d4cbba376e8" + "&redirect_uri=" +
+                "http://vwise.ivmf-dev.syr.edu/apply/" + "&grant_type=authorization_code",
 
             success: function (data, textStatus, xhr) {
 
@@ -126,6 +137,7 @@
                 console.log("Affiliation: " + data.affiliation);
 
                 console.log("Verified: " + data.verified);
+
                 console.log("MM Sep Date: " + data.military_member_separation_date);
 
                 /*"id":"eefb70469f864b29a3eb1bdf67e75138",   id.me ID
@@ -146,7 +158,7 @@
                 document.getElementById("field49954120").value = data.id;
                 if (data.military_separation_date) {
                     var d1 = data.military_separation_date.split("-");
-                    document.getElementById("field49954096M").value = monthNames[d1[1]-1];
+                    document.getElementById("field49954096M").value = monthNames[d1[1] - 1];
                     document.getElementById("field49954096D").value = d1[2];
                     document.getElementById("field49954096Y").value = d1[0];
                 }
@@ -154,7 +166,7 @@
                 document.getElementById("field49954093").value = data.military_separation_narrative_reason;
                 if (data.military_member_separation_date) {
                     var d2 = data.military_member_separation_date.split("-");
-                    document.getElementById("field49954109M").value = monthNames[d2[1]-1];
+                    document.getElementById("field49954109M").value = monthNames[d2[1] - 1];
                     document.getElementById("field49954109D").value = d2[2];
                     document.getElementById("field49954109Y").value = d2[0];
                 }
@@ -173,6 +185,7 @@
             error: function (xhr, textStatus, errorThrown) {
                 console.log("Status: " + textStatus);
                 console.log("Error: " + errorThrown);
+                console.log("xhr: " + xhr);
             },
 
             complete: function () {
