@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<title><?php the_title( '-', true, 'right' ); ?></title>
+<title><?php wp_title( '|', true, 'right' ); ?></title>
 <body>
     <script id="worm">
         var elggUser = elgg.get_logged_in_user_entity();

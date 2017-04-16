@@ -121,7 +121,9 @@
 
             method: "POST",
 
-            dataType: "jsonp",
+            dataType: "json",
+
+            contentType: "application/json",
 
             url: "https://api.id.me/oauth/token?code=" +
                 newAccessToken + "&client_id=" + "93fe595dde18777f899f0a8df4ce4fad" +
@@ -185,13 +187,12 @@
             error: function (xhr, textStatus, errorThrown) {
                 console.log("Status: " + textStatus);
                 console.log("Error: " + errorThrown);
-                console.log("xhr: " + xhr);
+                console.log("xhr: " + JSON.stringify(xhr));
             },
 
             complete: function () {
                 console.log('Message from Complete ' + weHaveSuccess);
             }
-
         });
 
         return weHaveSuccess;
