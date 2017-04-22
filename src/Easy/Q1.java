@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * Created by Srikiran Sistla on 1/14/2017.
+ * Two Sum
  */
 public class Q1 {
     public int[] twoSum(int[] nums, int target) {
