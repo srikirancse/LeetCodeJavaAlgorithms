@@ -6,6 +6,9 @@ public class Q98 {
     }
 
     private boolean helper(TreeNode root, Integer min, Integer max) {
-        return root == null || !((min != null && root.val <= min) || (max != null && root.val >= max)) && helper(root.left, min, root.val) && helper(root.right, root.val, max);
+        if (root == null) return true;
+        if (min != null && root.val <= min) return false;
+        if (max != null && root.val >= max) return false;
+        return helper(root.left, min, root.val) && helper(root.right, root.val, max);
     }
 }

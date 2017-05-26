@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 /**
  * Created by Srikiran Sistla on 4/21/2017.
+ * Balanced Smilies
  */
 public class HoneyWellQ2 {
     public static void main(String[] args) {
